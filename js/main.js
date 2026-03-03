@@ -70,3 +70,27 @@ function setupPagination() {
 }
 
 displayImages(1);
+
+// ===== RANDOM CHANGING PREVIEW =====
+
+const previewImage = document.getElementById("randomPreview");
+
+function changePreview() {
+    if (!imageData || imageData.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * imageData.length);
+    const randomImage = imageData[randomIndex].file;
+
+    previewImage.style.opacity = 0;
+
+    setTimeout(() => {
+        previewImage.src = `assets/images/${randomImage}`;
+        previewImage.style.opacity = 1;
+    }, 400);
+}
+
+// Initial load
+changePreview();
+
+// Change every 4 seconds
+setInterval(changePreview, 4000);

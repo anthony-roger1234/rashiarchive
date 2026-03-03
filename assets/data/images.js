@@ -18,7 +18,7 @@ const imageData = [
     { file: "Axelle Dela Cruz.jpg", link: "https://google.com" }, 
     { file: "Ayesha Oprenario.jpg", link: "https://google.com" }, 
     { file: "Belle Anne.jpg", link: "https://google.com" }, 
-    { file: "Bianca Celine Lorenzo.jpg", link: "https://google.com" }, 
+    { file: "Bianca Celine Lorenzo.jpg", link: "https://1024terabox.com/s/1_Eq-L1KE9wSws5ha9LIE1g" }, 
     { file: "Carmela Copper.jpg", link: "https://google.com" }, 
     { file: "Charess Mabia.jpg", link: "https://google.com" }, 
     { file: "Charmaine Andiso.jpg", link: "https://google.com" }, 

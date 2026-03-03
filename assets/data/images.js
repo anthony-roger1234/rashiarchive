@@ -29,7 +29,6 @@ const imageData = [
     { file: "Coreen Tungol.jpg", link: "https://google.com" }, 
     { file: "Divine Villareal.jpg", link: "https://google.com" }, 
     { file: "Dump_Ellaa.jpg", link: "https://google.com" }, 
-    { file: "Eisly Brown.jpg", link: "https://google.com" }, 
     { file: "Eisly Hosenilla.jpg", link: "https://google.com" }, 
     { file: "Elle Pascual.jpg", link: "https://google.com" }, 
     { file: "Erica Almonte.jpg", link: "https://google.com" }, 

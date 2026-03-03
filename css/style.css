@@ -1,136 +1,56 @@
-/* ===== RESET ===== */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* BODY */
 body {
+    background-color: #000;
+    color: #fff;
     font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
 }
 
-/* ===== GLOBAL ===== */
+/* CONTAINER */
 .container {
     width: 90%;
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
 }
 
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s ease;
-}
-
-.btn:hover {
-    background: #0056b3;
-}
-
-/* ===== HEADER ===== */
+/* HEADER */
 .header {
-    background: #111;
-    color: #fff;
-    padding: 15px 0;
+    padding: 30px 0;
+    text-align: center;
 }
 
+/* LOGO */
 .logo {
-    float: left;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
-.nav {
-    float: right;
+.white {
+    color: #ffffff;
 }
 
-.nav-links {
-    list-style: none;
+.yellow {
+    color: #FFD700;
 }
 
-.nav-links li {
-    display: inline;
-    margin-left: 20px;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* ===== HERO ===== */
+/* HERO */
 .hero {
-    background: #007bff;
-    color: white;
-    padding: 100px 0;
-    text-align: center;
-}
-
-/* ===== FEATURES ===== */
-.features {
-    padding: 50px 0;
-    background: #fff;
-}
-
-.features .container {
+    height: 80vh;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.feature-box {
-    flex: 1;
-    padding: 20px;
-    margin: 10px;
-    background: #f9f9f9;
-    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
-/* ===== FOOTER ===== */
-.footer {
-    background: #111;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width: 768px) {
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        background: #111;
-        position: absolute;
-        right: 20px;
-        top: 60px;
-        padding: 10px;
-    }
-
-    .nav-links li {
-        display: block;
-        margin: 10px 0;
-    }
-
-    .menu-toggle {
-        display: inline-block;
-    }
-
-    .features .container {
-        flex-direction: column;
-    }
+.hero h2 {
+    font-size: 28px;
+    font-weight: 300;
+    color: #aaa;
 }

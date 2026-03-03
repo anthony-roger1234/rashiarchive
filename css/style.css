@@ -108,3 +108,19 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* RANDOM PREVIEW */
+.preview-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.preview-container img {
+    width: 300px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    border: 1px solid #222;
+}

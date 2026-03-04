@@ -17,50 +17,44 @@ const imageCounter = document.getElementById("imageCounter");
 let cardsPerPage = 50;
 let currentPage = 1;
 let currentImageIndex = 0;
-let isCompact = true; // SHOW LESS default
+let isCompact = true;
+const passphrase = "rashi1234";
 
-const passphrase = "rashi1234"; // Set passphrase
-
-/* Zoom & Drag */
-let scale = 1, isDragging = false, startX, startY, translateX = 0, translateY = 0;
+/* Zoom & Pan */
+let scale = 1, translateX = 0, translateY = 0;
+let isDragging = false, startX, startY;
 
 /* ---------- DISPLAY ---------- */
 function displayImages(page) {
     grid.innerHTML = "";
     currentPage = page;
-    const start = (page - 1) * cardsPerPage;
-    const end = start + cardsPerPage;
-    const paginatedItems = imageData.slice(start, end);
+    const start = (page-1)*cardsPerPage;
+    const end = start+cardsPerPage;
+    const items = imageData.slice(start,end);
 
-    paginatedItems.forEach((item, idx) => {
-        const realIndex = start + idx;
+    items.forEach((item, idx)=>{
+        const realIndex = start+idx;
         const card = document.createElement("div");
         card.classList.add("card");
 
         const img = document.createElement("img");
         img.src = `assets/images/${item.file}`;
         img.draggable = false;
-        img.addEventListener("click", () => openModal(realIndex));
-        img.addEventListener("contextmenu", e => e.preventDefault());
+        img.addEventListener("click",()=>openModal(realIndex));
+        img.addEventListener("contextmenu", e=>e.preventDefault());
 
         const title = document.createElement("h3");
-        title.textContent = item.file.replace(/\.[^/.]+$/, "");
+        title.textContent = item.file.replace(/\.[^/.]+$/,"");
 
         const link = document.createElement("a");
         link.href = item.link;
-        link.target = "_blank";
         link.classList.add("view-btn");
         link.textContent = "View";
-
-        // Passphrase protection
-        link.addEventListener("click", (e) => {
+        link.addEventListener("click", e=>{
             e.preventDefault();
-            const userInput = prompt("Enter passphrase to view:");
-            if(userInput === passphrase) {
-                window.open(item.link, "_blank");
-            } else {
-                alert("Incorrect passphrase!");
-            }
+            const input = prompt("Enter passphrase to view:");
+            if(input===passphrase){ window.open(item.link,"_blank"); }
+            else{ alert("Incorrect passphrase!"); }
         });
 
         card.appendChild(img);
@@ -71,115 +65,107 @@ function displayImages(page) {
     setupPagination();
 }
 
-function setupPagination() {
-    paginationTop.innerHTML = "";
-    paginationBottom.innerHTML = "";
-
-    const pageCount = Math.ceil(imageData.length / cardsPerPage);
-
-    for (let i = 1; i <= pageCount; i++) {
-        const btnTop = document.createElement("button");
-        const btnBottom = document.createElement("button");
-
-        btnTop.textContent = i;
-        btnBottom.textContent = i;
-
-        if (i === currentPage) {
-            btnTop.classList.add("active");
-            btnBottom.classList.add("active");
-        }
-
-        btnTop.addEventListener("click", () => displayImages(i));
-        btnBottom.addEventListener("click", () => displayImages(i));
-
+function setupPagination(){
+    paginationTop.innerHTML="";
+    paginationBottom.innerHTML="";
+    const pageCount=Math.ceil(imageData.length/cardsPerPage);
+    for(let i=1;i<=pageCount;i++){
+        const btnTop=document.createElement("button");
+        const btnBottom=document.createElement("button");
+        btnTop.textContent=btnBottom.textContent=i;
+        if(i===currentPage){ btnTop.classList.add("active"); btnBottom.classList.add("active"); }
+        btnTop.addEventListener("click",()=>displayImages(i));
+        btnBottom.addEventListener("click",()=>displayImages(i));
         paginationTop.appendChild(btnTop);
         paginationBottom.appendChild(btnBottom);
     }
 }
 
 /* ---------- LAYOUT TOGGLE ---------- */
-function toggleLayout() {
-    if (isCompact) {
-        cardsPerPage = 200;
+function toggleLayout(){
+    if(isCompact){
+        cardsPerPage=200;
         grid.classList.remove("compact");
         grid.classList.add("extended");
-        layoutToggleBtn.textContent = "SHOW LESS";
-        isCompact = false;
-    } else {
-        cardsPerPage = 50;
+        layoutToggleBtn.textContent="SHOW LESS";
+        isCompact=false;
+    }else{
+        cardsPerPage=50;
         grid.classList.remove("extended");
         grid.classList.add("compact");
-        layoutToggleBtn.textContent = "SHOW MORE";
-        isCompact = true;
+        layoutToggleBtn.textContent="SHOW MORE";
+        isCompact=true;
     }
     displayImages(1);
 }
 layoutToggleBtn.addEventListener("click", toggleLayout);
 
 /* ---------- RANDOM PREVIEW ---------- */
-function changePreview() {
-    if (!imageData.length) return;
-    currentImageIndex = Math.floor(Math.random() * imageData.length);
-    previewImage.style.opacity = 0;
-    setTimeout(() => {
-        previewImage.src = `assets/images/${imageData[currentImageIndex].file}`;
-        previewImage.style.opacity = 1;
-    }, 400);
+function changePreview(){
+    if(!imageData.length) return;
+    currentImageIndex=Math.floor(Math.random()*imageData.length);
+    previewImage.style.opacity=0;
+    setTimeout(()=>{ previewImage.src=`assets/images/${imageData[currentImageIndex].file}`; previewImage.style.opacity=1; },400);
 }
 changePreview();
-setInterval(changePreview, 4000);
+setInterval(changePreview,4000);
 
 /* ---------- MODAL ---------- */
-function openModal(index) {
-    currentImageIndex = index;
-    modalImage.className = "modal-image active";
-    modalImage.src = `assets/images/${imageData[index].file}`;
+function openModal(index){
+    currentImageIndex=index;
+    modalImage.className="modal-image active";
+    modalImage.src=`assets/images/${imageData[index].file}`;
     previewModal.classList.add("active");
     updateCounter();
     resetZoom();
 }
 
-function closeModalFunc() { previewModal.classList.remove("active"); }
+function closeModalFunc(){ previewModal.classList.remove("active"); }
 
-/* ---------- SLIDE NAVIGATION ---------- */
-function slideTo(nextIndex, direction) {
+/* ---------- SLIDE ---------- */
+function slideTo(nextIndex, direction){
     const oldImage = modalImage.cloneNode();
     oldImage.src = modalImage.src;
-    oldImage.className = `modal-image ${direction === "left" ? "slide-left" : "slide-right"}`;
+    oldImage.className=`modal-image ${direction==="left"?"slide-left":"slide-right"}`;
     previewModal.appendChild(oldImage);
-
-    currentImageIndex = nextIndex;
-    modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
-    modalImage.className = "modal-image active";
+    currentImageIndex=nextIndex;
+    modalImage.src=`assets/images/${imageData[currentImageIndex].file}`;
+    modalImage.className="modal-image active";
     updateCounter();
-
-    setTimeout(() => {
-        if (oldImage.parentNode) oldImage.remove();
-        resetZoom();
-    }, 500);
+    setTimeout(()=>{ if(oldImage.parentNode) oldImage.remove(); resetZoom(); },500);
 }
 
-function showNext() {
-    let nextIndex = (currentImageIndex + 1) % imageData.length;
-    slideTo(nextIndex, "left");
-}
+function showNext(){ slideTo((currentImageIndex+1)%imageData.length,"left"); }
+function showPrev(){ slideTo((currentImageIndex-1+imageData.length)%imageData.length,"right"); }
+function updateCounter(){ imageCounter.textContent=`${currentImageIndex+1} / ${imageData.length}`; }
 
-function showPrev() {
-    let prevIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
-    slideTo(prevIndex, "right");
-}
+/* ---------- ZOOM & PAN ---------- */
+function resetZoom(){ scale=1; translateX=0; translateY=0; updateTransform(); }
+function updateTransform(){ modalImage.style.transform=`scale(${scale}) translate(${translateX}px,${translateY}px)`; }
 
-function updateCounter() { imageCounter.textContent = `${currentImageIndex+1} / ${imageData.length}`; }
+modalImage.addEventListener("dblclick",()=>{ scale=scale===1?2:1; updateTransform(); });
 
-/* ---------- ZOOM ---------- */
-function resetZoom() { scale=1; translateX=0; translateY=0; updateTransform(); }
-function updateTransform() { modalImage.style.transform=`scale(${scale}) translate(${translateX}px, ${translateY}px)`; }
-
-previewModal.addEventListener("wheel", e => { e.preventDefault(); scale += e.deltaY*-0.001; scale=Math.min(Math.max(1,scale),4); updateTransform(); });
-modalImage.addEventListener("dblclick", ()=>{ scale = scale===1?2:1; updateTransform(); });
+// Mouse
 modalImage.addEventListener("mousedown", e=>{ if(scale<=1) return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-translateY; });
 window.addEventListener("mousemove", e=>{ if(!isDragging) return; translateX=e.clientX-startX; translateY=e.clientY-startY; updateTransform(); });
-window.addEventListener("mouseup", ()=>{ isDragging=false; });
+window.addEventListener("mouseup", ()=>isDragging=false);
+
+// Touch
+modalImage.addEventListener("touchstart", e=>{
+    if(scale<=1) return;
+    isDragging=true;
+    startX=e.touches[0].clientX-translateX;
+    startY=e.touches[0].clientY-translateY;
+});
+modalImage.addEventListener("touchmove", e=>{
+    if(!isDragging) return;
+    translateX=e.touches[0].clientX-startX;
+    translateY=e.touches[0].clientY-startY;
+    updateTransform();
+});
+modalImage.addEventListener("touchend", ()=>isDragging=false);
+
+previewModal.addEventListener("wheel", e=>{ e.preventDefault(); scale+=e.deltaY*-0.001; scale=Math.min(Math.max(1,scale),4); updateTransform(); });
 
 /* ---------- EVENTS ---------- */
 previewImage.addEventListener("click", ()=>openModal(currentImageIndex));
@@ -196,7 +182,7 @@ document.addEventListener("keydown", e=>{
     if(e.key==="ArrowLeft") showPrev();
 });
 
-/* SWIPE SUPPORT */
+/* SWIPE NAVIGATION */
 let touchStartX=0;
 previewModal.addEventListener("touchstart", e=>{ touchStartX=e.changedTouches[0].screenX; });
 previewModal.addEventListener("touchend", e=>{

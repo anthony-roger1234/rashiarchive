@@ -11,11 +11,15 @@ const nextBtn = document.getElementById("nextBtn");
 
 const cardsPerPage = 50;
 let currentPage = 1;
-let currentPreviewIndex = 0;
+let currentImageIndex = 0;
+
+/* ---------- UTIL ---------- */
 
 function removeExtension(filename) {
     return filename.replace(/\.[^/.]+$/, "");
 }
+
+/* ---------- DISPLAY GALLERY ---------- */
 
 function displayImages(page) {
     grid.innerHTML = "";
@@ -25,12 +29,20 @@ function displayImages(page) {
     const end = start + cardsPerPage;
     const paginatedItems = imageData.slice(start, end);
 
-    paginatedItems.forEach(item => {
+    paginatedItems.forEach((item, index) => {
+        const realIndex = start + index;
+
         const card = document.createElement("div");
         card.classList.add("card");
 
         const img = document.createElement("img");
         img.src = `assets/images/${item.file}`;
+        img.style.cursor = "pointer";
+
+        // 🔥 CLICK CARD IMAGE TO OPEN MODAL
+        img.addEventListener("click", () => {
+            openModal(realIndex);
+        });
 
         const title = document.createElement("h3");
         title.textContent = removeExtension(item.file);
@@ -51,9 +63,12 @@ function displayImages(page) {
     setupPagination();
 }
 
+/* ---------- PAGINATION ---------- */
+
 function setupPagination() {
     paginationTop.innerHTML = "";
     paginationBottom.innerHTML = "";
+
     const pageCount = Math.ceil(imageData.length / cardsPerPage);
 
     for (let i = 1; i <= pageCount; i++) {
@@ -78,16 +93,16 @@ function setupPagination() {
 
 displayImages(1);
 
-/* RANDOM PREVIEW */
+/* ---------- RANDOM PREVIEW ---------- */
 
 function changePreview() {
     if (!imageData.length) return;
 
-    currentPreviewIndex = Math.floor(Math.random() * imageData.length);
+    currentImageIndex = Math.floor(Math.random() * imageData.length);
     previewImage.style.opacity = 0;
 
     setTimeout(() => {
-        previewImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
+        previewImage.src = `assets/images/${imageData[currentImageIndex].file}`;
         previewImage.style.opacity = 1;
     }, 400);
 }
@@ -95,10 +110,10 @@ function changePreview() {
 changePreview();
 setInterval(changePreview, 4000);
 
-/* MODAL LOGIC */
+/* ---------- MODAL SYSTEM ---------- */
 
 function openModal(index) {
-    currentPreviewIndex = index;
+    currentImageIndex = index;
     modalImage.src = `assets/images/${imageData[index].file}`;
     previewModal.classList.add("active");
 }
@@ -108,24 +123,31 @@ function closeModalFunc() {
 }
 
 function showNext() {
-    currentPreviewIndex = (currentPreviewIndex + 1) % imageData.length;
-    modalImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
+    currentImageIndex = (currentImageIndex + 1) % imageData.length;
+    modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
 }
 
 function showPrev() {
-    currentPreviewIndex =
-        (currentPreviewIndex - 1 + imageData.length) % imageData.length;
-    modalImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
+    currentImageIndex =
+        (currentImageIndex - 1 + imageData.length) % imageData.length;
+    modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
 }
 
+/* ---------- EVENTS ---------- */
+
+// Preview click
 previewImage.addEventListener("click", () => {
-    openModal(currentPreviewIndex);
+    openModal(currentImageIndex);
 });
 
+// Close
 closeModal.addEventListener("click", closeModalFunc);
+
+// Arrows
 nextBtn.addEventListener("click", showNext);
 prevBtn.addEventListener("click", showPrev);
 
+// Keyboard
 document.addEventListener("keydown", (e) => {
     if (!previewModal.classList.contains("active")) return;
 
@@ -134,7 +156,7 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") showPrev();
 });
 
-/* Swipe Support */
+// Swipe (mobile)
 let touchStartX = 0;
 
 previewModal.addEventListener("touchstart", (e) => {
@@ -148,6 +170,7 @@ previewModal.addEventListener("touchend", (e) => {
     if (touchEndX > touchStartX + 50) showPrev();
 });
 
+// Click outside to close
 previewModal.addEventListener("click", (e) => {
     if (e.target === previewModal) closeModalFunc();
 });

@@ -60,11 +60,6 @@ body {
     cursor: pointer;
 }
 
-.layout-btn.active {
-    background: #FFD700;
-    color: black;
-}
-
 /* GALLERY */
 .gallery {
     width: 95%;
@@ -79,7 +74,6 @@ body {
 .grid.compact { grid-template-columns: repeat(5, 1fr); }
 .grid.extended { grid-template-columns: repeat(10, 1fr); }
 
-/* Responsive fallback */
 @media (max-width: 1200px) {
     .grid.extended { grid-template-columns: repeat(5, 1fr); }
 }
@@ -206,7 +200,6 @@ body {
     border-radius: 20px;
 }
 
-/* Disable selection and dragging */
 img {
     user-select: none;
     -webkit-user-drag: none;

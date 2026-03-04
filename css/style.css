@@ -13,11 +13,11 @@ body {
 /* HEADER */
 .header {
     text-align: center;
-    padding: 30px 0;
+    padding: 20px 0;
 }
 
 .logo {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: bold;
 }
 
@@ -26,15 +26,15 @@ body {
 
 /* RANDOM PREVIEW */
 .preview-container {
-    margin-top: 20px;
+    margin-top: 15px;
     display: flex;
     justify-content: center;
 }
 
 .preview-container img {
-    width: 300px;
-    height: 180px;
-    object-fit: cover;
+    width: 90%;
+    max-width: 300px;
+    height: auto;
     border-radius: 8px;
     border: 1px solid #222;
     cursor: pointer;
@@ -48,7 +48,7 @@ body {
 
 /* LAYOUT SWITCHER */
 .layout-switcher {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .layout-btn {
@@ -68,43 +68,51 @@ body {
 
 .grid {
     display: grid;
-    gap: 20px;
+    gap: 12px;
 }
 
 .grid.compact { grid-template-columns: repeat(5, 1fr); }
 .grid.extended { grid-template-columns: repeat(10, 1fr); }
 
 @media (max-width: 1200px) {
+    .grid.compact { grid-template-columns: repeat(3, 1fr); }
     .grid.extended { grid-template-columns: repeat(5, 1fr); }
 }
 
+@media (max-width: 768px) {
+    .grid.compact { grid-template-columns: repeat(2, 1fr); }
+    .grid.extended { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* CARD */
 .card {
     background: #111;
-    padding: 10px;
+    padding: 8px;
     border-radius: 8px;
     text-align: center;
 }
 
 .card img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
     border-radius: 6px;
 }
 
 .card h3 {
-    margin: 10px 0 5px;
-    font-size: 16px;
+    margin: 6px 0 4px;
+    font-size: 14px;
+    word-break: break-word;
 }
 
 .view-btn {
     display: inline-block;
-    margin-top: 8px;
-    padding: 6px 12px;
+    margin-top: 6px;
+    padding: 5px 10px;
     background: red;
     color: #fff;
     text-decoration: none;
     border-radius: 4px;
+    font-size: 13px;
 }
 
 .view-btn:hover { background: darkred; }
@@ -112,15 +120,15 @@ body {
 /* PAGINATION */
 .pagination {
     text-align: center;
-    margin: 30px 0;
+    margin: 20px 0;
 }
 
 .pagination button {
     background: #222;
     color: #fff;
     border: 1px solid #444;
-    padding: 8px 14px;
-    margin: 5px;
+    padding: 6px 12px;
+    margin: 3px;
     cursor: pointer;
 }
 
@@ -134,7 +142,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,6 +150,7 @@ body {
     visibility: hidden;
     transition: opacity 0.4s ease;
     z-index: 1000;
+    touch-action: none;
 }
 
 .preview-modal.active {
@@ -154,7 +163,7 @@ body {
     max-height: 90%;
     border-radius: 10px;
     position: absolute;
-    transition: transform 0.5s ease, opacity 0.5s ease;
+    transition: transform 0.4s ease, opacity 0.4s ease;
     opacity: 1;
 }
 
@@ -164,9 +173,9 @@ body {
 
 .close-modal {
     position: absolute;
-    top: 20px;
-    right: 35px;
-    font-size: 40px;
+    top: 15px;
+    right: 25px;
+    font-size: 36px;
     cursor: pointer;
     color: white;
 }
@@ -178,25 +187,25 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 50px;
+    font-size: 40px;
     cursor: pointer;
     color: white;
-    padding: 20px;
+    padding: 15px;
     user-select: none;
 }
 
 .nav:hover { color: #FFD700; }
-.nav.left { left: 20px; }
-.nav.right { right: 20px; }
+.nav.left { left: 15px; }
+.nav.right { right: 15px; }
 
 /* IMAGE COUNTER */
 .image-counter {
     position: absolute;
-    bottom: 25px;
+    bottom: 15px;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     background: rgba(0,0,0,0.5);
-    padding: 6px 14px;
+    padding: 4px 10px;
     border-radius: 20px;
 }
 

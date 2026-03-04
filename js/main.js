@@ -1,6 +1,7 @@
 const grid = document.getElementById("imageGrid");
 const paginationTop = document.getElementById("pagination-top");
 const paginationBottom = document.getElementById("pagination-bottom");
+const previewImage = document.getElementById("randomPreview");
 
 const cardsPerPage = 50;
 let currentPage = 1;
@@ -71,9 +72,7 @@ function setupPagination() {
 
 displayImages(1);
 
-// ===== RANDOM CHANGING PREVIEW =====
-
-const previewImage = document.getElementById("randomPreview");
+/* RANDOM PREVIEW */
 
 function changePreview() {
     if (!imageData || imageData.length === 0) return;
@@ -89,8 +88,34 @@ function changePreview() {
     }, 400);
 }
 
-// Initial load
 changePreview();
-
-// Change every 4 seconds
 setInterval(changePreview, 4000);
+
+/* PREVIEW MODAL */
+
+const previewModal = document.getElementById("previewModal");
+const modalImage = document.getElementById("modalImage");
+const closeModal = document.getElementById("closeModal");
+
+previewImage.addEventListener("click", () => {
+    if (!previewImage.src) return;
+
+    modalImage.src = previewImage.src;
+    previewModal.classList.add("active");
+});
+
+closeModal.addEventListener("click", () => {
+    previewModal.classList.remove("active");
+});
+
+previewModal.addEventListener("click", (e) => {
+    if (e.target === previewModal) {
+        previewModal.classList.remove("active");
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        previewModal.classList.remove("active");
+    }
+});

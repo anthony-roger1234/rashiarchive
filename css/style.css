@@ -155,20 +155,18 @@ body {
     visibility: visible;
 }
 
-/* MODAL IMAGE WITH SMOOTH TRANSITION */
 .modal-image {
     max-width: 90%;
     max-height: 90%;
     border-radius: 10px;
-    transform: scale(0.8);
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    opacity: 0;
-}
-
-.preview-modal.active .modal-image {
-    transform: scale(1);
+    position: absolute;
+    transition: transform 0.5s ease, opacity 0.5s ease;
     opacity: 1;
 }
+
+.modal-image.slide-left { transform: translateX(-120%) scale(1); opacity: 0; }
+.modal-image.slide-right { transform: translateX(120%) scale(1); opacity: 0; }
+.modal-image.active { transform: translateX(0) scale(1); opacity: 1; }
 
 .close-modal {
     position: absolute;

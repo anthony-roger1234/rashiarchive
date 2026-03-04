@@ -8,37 +8,35 @@
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <h1 class="logo">
-            <span class="white">RASHI</span>
-            <span class="yellow">ARCHIVE</span>
-        </h1>
+<header class="header">
+    <h1 class="logo">
+        <span class="white">RASHI</span>
+        <span class="yellow">ARCHIVE</span>
+    </h1>
 
-        <div class="preview-container">
-            <img id="randomPreview" src="" alt="Preview">
-        </div>
-    </header>
-
-    <!-- TOP PAGINATION -->
-    <div class="pagination" id="pagination-top"></div>
-
-    <!-- IMAGE GRID -->
-    <section class="gallery">
-        <div class="grid" id="imageGrid"></div>
-    </section>
-
-    <!-- BOTTOM PAGINATION -->
-    <div class="pagination" id="pagination-bottom"></div>
-
-    <!-- PREVIEW MODAL -->
-    <div class="preview-modal" id="previewModal">
-        <span class="close-modal" id="closeModal">&times;</span>
-        <img class="modal-image" id="modalImage">
+    <div class="preview-container">
+        <img id="randomPreview" src="" alt="Preview">
     </div>
+</header>
 
-    <script src="assets/data/images.js"></script>
-    <script src="js/main.js"></script>
+<div class="pagination" id="pagination-top"></div>
+
+<section class="gallery">
+    <div class="grid" id="imageGrid"></div>
+</section>
+
+<div class="pagination" id="pagination-bottom"></div>
+
+<!-- PRO MODAL -->
+<div class="preview-modal" id="previewModal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <div class="nav left" id="prevBtn">&#10094;</div>
+    <img class="modal-image" id="modalImage">
+    <div class="nav right" id="nextBtn">&#10095;</div>
+</div>
+
+<script src="assets/data/images.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

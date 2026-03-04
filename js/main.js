@@ -3,8 +3,15 @@ const paginationTop = document.getElementById("pagination-top");
 const paginationBottom = document.getElementById("pagination-bottom");
 const previewImage = document.getElementById("randomPreview");
 
+const previewModal = document.getElementById("previewModal");
+const modalImage = document.getElementById("modalImage");
+const closeModal = document.getElementById("closeModal");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
 const cardsPerPage = 50;
 let currentPage = 1;
+let currentPreviewIndex = 0;
 
 function removeExtension(filename) {
     return filename.replace(/\.[^/.]+$/, "");
@@ -47,7 +54,6 @@ function displayImages(page) {
 function setupPagination() {
     paginationTop.innerHTML = "";
     paginationBottom.innerHTML = "";
-
     const pageCount = Math.ceil(imageData.length / cardsPerPage);
 
     for (let i = 1; i <= pageCount; i++) {
@@ -75,15 +81,13 @@ displayImages(1);
 /* RANDOM PREVIEW */
 
 function changePreview() {
-    if (!imageData || imageData.length === 0) return;
+    if (!imageData.length) return;
 
-    const randomIndex = Math.floor(Math.random() * imageData.length);
-    const randomImage = imageData[randomIndex].file;
-
+    currentPreviewIndex = Math.floor(Math.random() * imageData.length);
     previewImage.style.opacity = 0;
 
     setTimeout(() => {
-        previewImage.src = `assets/images/${randomImage}`;
+        previewImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
         previewImage.style.opacity = 1;
     }, 400);
 }
@@ -91,31 +95,59 @@ function changePreview() {
 changePreview();
 setInterval(changePreview, 4000);
 
-/* PREVIEW MODAL */
+/* MODAL LOGIC */
 
-const previewModal = document.getElementById("previewModal");
-const modalImage = document.getElementById("modalImage");
-const closeModal = document.getElementById("closeModal");
+function openModal(index) {
+    currentPreviewIndex = index;
+    modalImage.src = `assets/images/${imageData[index].file}`;
+    previewModal.classList.add("active");
+}
+
+function closeModalFunc() {
+    previewModal.classList.remove("active");
+}
+
+function showNext() {
+    currentPreviewIndex = (currentPreviewIndex + 1) % imageData.length;
+    modalImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
+}
+
+function showPrev() {
+    currentPreviewIndex =
+        (currentPreviewIndex - 1 + imageData.length) % imageData.length;
+    modalImage.src = `assets/images/${imageData[currentPreviewIndex].file}`;
+}
 
 previewImage.addEventListener("click", () => {
-    if (!previewImage.src) return;
-
-    modalImage.src = previewImage.src;
-    previewModal.classList.add("active");
+    openModal(currentPreviewIndex);
 });
 
-closeModal.addEventListener("click", () => {
-    previewModal.classList.remove("active");
+closeModal.addEventListener("click", closeModalFunc);
+nextBtn.addEventListener("click", showNext);
+prevBtn.addEventListener("click", showPrev);
+
+document.addEventListener("keydown", (e) => {
+    if (!previewModal.classList.contains("active")) return;
+
+    if (e.key === "Escape") closeModalFunc();
+    if (e.key === "ArrowRight") showNext();
+    if (e.key === "ArrowLeft") showPrev();
+});
+
+/* Swipe Support */
+let touchStartX = 0;
+
+previewModal.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+previewModal.addEventListener("touchend", (e) => {
+    let touchEndX = e.changedTouches[0].screenX;
+
+    if (touchEndX < touchStartX - 50) showNext();
+    if (touchEndX > touchStartX + 50) showPrev();
 });
 
 previewModal.addEventListener("click", (e) => {
-    if (e.target === previewModal) {
-        previewModal.classList.remove("active");
-    }
-});
-
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-        previewModal.classList.remove("active");
-    }
+    if (e.target === previewModal) closeModalFunc();
 });

@@ -19,6 +19,8 @@ let currentPage = 1;
 let currentImageIndex = 0;
 let isCompact = true; // SHOW LESS default
 
+const passphrase = "rashi1234"; // Set passphrase
+
 /* Zoom & Drag */
 let scale = 1, isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
@@ -49,6 +51,17 @@ function displayImages(page) {
         link.target = "_blank";
         link.classList.add("view-btn");
         link.textContent = "View";
+
+        // Passphrase protection
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const userInput = prompt("Enter passphrase to view:");
+            if(userInput === passphrase) {
+                window.open(item.link, "_blank");
+            } else {
+                alert("Incorrect passphrase!");
+            }
+        });
 
         card.appendChild(img);
         card.appendChild(title);

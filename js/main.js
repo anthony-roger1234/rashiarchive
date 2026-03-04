@@ -4,8 +4,7 @@ const grid = document.getElementById("imageGrid");
 const paginationTop = document.getElementById("pagination-top");
 const paginationBottom = document.getElementById("pagination-bottom");
 
-const compactBtn = document.getElementById("compactBtn");
-const extendedBtn = document.getElementById("extendedBtn");
+const layoutToggleBtn = document.getElementById("layoutToggleBtn");
 
 const previewImage = document.getElementById("randomPreview");
 const previewModal = document.getElementById("previewModal");
@@ -18,7 +17,7 @@ const imageCounter = document.getElementById("imageCounter");
 let cardsPerPage = 50;
 let currentPage = 1;
 let currentImageIndex = 0;
-let columnsMode = "compact";
+let isCompact = true; // SHOW LESS default
 
 /* Zoom & Drag */
 let scale = 1, isDragging = false, startX, startY, translateX = 0, translateY = 0;
@@ -85,23 +84,24 @@ function setupPagination() {
     }
 }
 
-/* ---------- LAYOUT SWITCH ---------- */
-function setCompactMode() {
-    cardsPerPage = 50; columnsMode = "compact";
-    grid.classList.remove("extended"); grid.classList.add("compact");
-    compactBtn.classList.add("active"); extendedBtn.classList.remove("active");
+/* ---------- LAYOUT TOGGLE ---------- */
+function toggleLayout() {
+    if (isCompact) {
+        cardsPerPage = 200;
+        grid.classList.remove("compact");
+        grid.classList.add("extended");
+        layoutToggleBtn.textContent = "SHOW LESS";
+        isCompact = false;
+    } else {
+        cardsPerPage = 50;
+        grid.classList.remove("extended");
+        grid.classList.add("compact");
+        layoutToggleBtn.textContent = "SHOW MORE";
+        isCompact = true;
+    }
     displayImages(1);
 }
-
-function setExtendedMode() {
-    cardsPerPage = 200; columnsMode = "extended";
-    grid.classList.remove("compact"); grid.classList.add("extended");
-    extendedBtn.classList.add("active"); compactBtn.classList.remove("active");
-    displayImages(1);
-}
-
-compactBtn.addEventListener("click", setCompactMode);
-extendedBtn.addEventListener("click", setExtendedMode);
+layoutToggleBtn.addEventListener("click", toggleLayout);
 
 /* ---------- RANDOM PREVIEW ---------- */
 function changePreview() {
@@ -164,7 +164,7 @@ function updateTransform() { modalImage.style.transform=`scale(${scale}) transla
 
 previewModal.addEventListener("wheel", e => { e.preventDefault(); scale += e.deltaY*-0.001; scale=Math.min(Math.max(1,scale),4); updateTransform(); });
 modalImage.addEventListener("dblclick", ()=>{ scale = scale===1?2:1; updateTransform(); });
-modalImage.addEventListener("mousedown", e=>{ if(scale<=1) return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-startY; });
+modalImage.addEventListener("mousedown", e=>{ if(scale<=1) return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-translateY; });
 window.addEventListener("mousemove", e=>{ if(!isDragging) return; translateX=e.clientX-startX; translateY=e.clientY-startY; updateTransform(); });
 window.addEventListener("mouseup", ()=>{ isDragging=false; });
 
@@ -193,6 +193,7 @@ previewModal.addEventListener("touchend", e=>{
 });
 
 /* ---------- INIT ---------- */
-setCompactMode();
+grid.classList.add("compact");
+displayImages(1);
 
 });

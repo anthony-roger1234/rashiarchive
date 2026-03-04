@@ -15,8 +15,19 @@
     </h1>
 
     <div class="preview-container">
-        <img id="randomPreview" src="" alt="Preview">
+        <img id="randomPreview" src="" alt="Preview" draggable="false">
     </div>
+
+    <!-- LAYOUT SWITCHER -->
+    <div class="layout-switcher">
+        <button id="compactBtn" class="layout-btn active">
+            5 Columns / 50 Per Page
+        </button>
+        <button id="extendedBtn" class="layout-btn">
+            10 Columns / 200 Per Page
+        </button>
+    </div>
+
 </header>
 
 <div class="pagination" id="pagination-top"></div>
@@ -27,12 +38,13 @@
 
 <div class="pagination" id="pagination-bottom"></div>
 
-<!-- PRO MODAL -->
+<!-- MODAL -->
 <div class="preview-modal" id="previewModal">
     <span class="close-modal" id="closeModal">&times;</span>
     <div class="nav left" id="prevBtn">&#10094;</div>
-    <img class="modal-image" id="modalImage">
+    <img class="modal-image" id="modalImage" draggable="false">
     <div class="nav right" id="nextBtn">&#10095;</div>
+    <div class="image-counter" id="imageCounter"></div>
 </div>
 
 <script src="assets/data/images.js"></script>

@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const grid = document.getElementById("imageGrid");
 const paginationTop = document.getElementById("pagination-top");
 const paginationBottom = document.getElementById("pagination-bottom");
@@ -25,7 +27,6 @@ let scale = 1, isDragging = false, startX, startY, translateX = 0, translateY = 
 function displayImages(page) {
     grid.innerHTML = "";
     currentPage = page;
-
     const start = (page - 1) * cardsPerPage;
     const end = start + cardsPerPage;
     const paginatedItems = imageData.slice(start, end);
@@ -38,7 +39,6 @@ function displayImages(page) {
         const img = document.createElement("img");
         img.src = `assets/images/${item.file}`;
         img.draggable = false;
-
         img.addEventListener("click", () => openModal(realIndex));
         img.addEventListener("contextmenu", e => e.preventDefault());
 
@@ -56,7 +56,6 @@ function displayImages(page) {
         card.appendChild(link);
         grid.appendChild(card);
     });
-
     setupPagination();
 }
 
@@ -120,38 +119,41 @@ setInterval(changePreview, 4000);
 /* ---------- MODAL ---------- */
 function openModal(index) {
     currentImageIndex = index;
-    modalImage.style.opacity = 0;
+    modalImage.className = "modal-image active";
+    modalImage.src = `assets/images/${imageData[index].file}`;
     previewModal.classList.add("active");
-    setTimeout(() => {
-        modalImage.src = `assets/images/${imageData[index].file}`;
-        modalImage.style.opacity = 1;
-        updateCounter();
-        resetZoom();
-    }, 100);
+    updateCounter();
+    resetZoom();
 }
 
 function closeModalFunc() { previewModal.classList.remove("active"); }
 
-function showNext() {
-    modalImage.style.opacity = 0;
-    currentImageIndex = (currentImageIndex + 1) % imageData.length;
+/* ---------- SLIDE NAVIGATION ---------- */
+function slideTo(nextIndex, direction) {
+    const oldImage = modalImage.cloneNode();
+    oldImage.src = modalImage.src;
+    oldImage.className = `modal-image ${direction === "left" ? "slide-left" : "slide-right"}`;
+    previewModal.appendChild(oldImage);
+
+    currentImageIndex = nextIndex;
+    modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
+    modalImage.className = "modal-image active";
+    updateCounter();
+
     setTimeout(() => {
-        modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
-        updateCounter();
+        if (oldImage.parentNode) oldImage.remove();
         resetZoom();
-        modalImage.style.opacity = 1;
-    }, 200);
+    }, 500);
+}
+
+function showNext() {
+    let nextIndex = (currentImageIndex + 1) % imageData.length;
+    slideTo(nextIndex, "left");
 }
 
 function showPrev() {
-    modalImage.style.opacity = 0;
-    currentImageIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
-    setTimeout(() => {
-        modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
-        updateCounter();
-        resetZoom();
-        modalImage.style.opacity = 1;
-    }, 200);
+    let prevIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
+    slideTo(prevIndex, "right");
 }
 
 function updateCounter() { imageCounter.textContent = `${currentImageIndex+1} / ${imageData.length}`; }
@@ -162,7 +164,7 @@ function updateTransform() { modalImage.style.transform=`scale(${scale}) transla
 
 previewModal.addEventListener("wheel", e => { e.preventDefault(); scale += e.deltaY*-0.001; scale=Math.min(Math.max(1,scale),4); updateTransform(); });
 modalImage.addEventListener("dblclick", ()=>{ scale = scale===1?2:1; updateTransform(); });
-modalImage.addEventListener("mousedown", e=>{ if(scale<=1) return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-translateY; });
+modalImage.addEventListener("mousedown", e=>{ if(scale<=1) return; isDragging=true; startX=e.clientX-translateX; startY=e.clientY-startY; });
 window.addEventListener("mousemove", e=>{ if(!isDragging) return; translateX=e.clientX-startX; translateY=e.clientY-startY; updateTransform(); });
 window.addEventListener("mouseup", ()=>{ isDragging=false; });
 
@@ -184,7 +186,13 @@ document.addEventListener("keydown", e=>{
 /* SWIPE SUPPORT */
 let touchStartX=0;
 previewModal.addEventListener("touchstart", e=>{ touchStartX=e.changedTouches[0].screenX; });
-previewModal.addEventListener("touchend", e=>{ let touchEndX=e.changedTouches[0].screenX; if(touchEndX<touchStartX-50) showNext(); if(touchEndX>touchStartX+50) showPrev(); });
+previewModal.addEventListener("touchend", e=>{
+    let touchEndX=e.changedTouches[0].screenX;
+    if(touchEndX<touchStartX-50) showNext();
+    if(touchEndX>touchStartX+50) showPrev();
+});
 
-/* INIT */
+/* ---------- INIT ---------- */
 setCompactMode();
+
+});

@@ -120,15 +120,40 @@ setInterval(changePreview, 4000);
 /* ---------- MODAL ---------- */
 function openModal(index) {
     currentImageIndex = index;
-    modalImage.src = `assets/images/${imageData[index].file}`;
+    modalImage.style.opacity = 0;
     previewModal.classList.add("active");
-    updateCounter();
-    resetZoom();
+    setTimeout(() => {
+        modalImage.src = `assets/images/${imageData[index].file}`;
+        modalImage.style.opacity = 1;
+        updateCounter();
+        resetZoom();
+    }, 100);
 }
 
 function closeModalFunc() { previewModal.classList.remove("active"); }
-function showNext() { currentImageIndex = (currentImageIndex+1)%imageData.length; modalImage.src = `assets/images/${imageData[currentImageIndex].file}`; updateCounter(); resetZoom(); }
-function showPrev() { currentImageIndex = (currentImageIndex-1+imageData.length)%imageData.length; modalImage.src = `assets/images/${imageData[currentImageIndex].file}`; updateCounter(); resetZoom(); }
+
+function showNext() {
+    modalImage.style.opacity = 0;
+    currentImageIndex = (currentImageIndex + 1) % imageData.length;
+    setTimeout(() => {
+        modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
+        updateCounter();
+        resetZoom();
+        modalImage.style.opacity = 1;
+    }, 200);
+}
+
+function showPrev() {
+    modalImage.style.opacity = 0;
+    currentImageIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
+    setTimeout(() => {
+        modalImage.src = `assets/images/${imageData[currentImageIndex].file}`;
+        updateCounter();
+        resetZoom();
+        modalImage.style.opacity = 1;
+    }, 200);
+}
+
 function updateCounter() { imageCounter.textContent = `${currentImageIndex+1} / ${imageData.length}`; }
 
 /* ---------- ZOOM ---------- */
@@ -160,3 +185,6 @@ document.addEventListener("keydown", e=>{
 let touchStartX=0;
 previewModal.addEventListener("touchstart", e=>{ touchStartX=e.changedTouches[0].screenX; });
 previewModal.addEventListener("touchend", e=>{ let touchEndX=e.changedTouches[0].screenX; if(touchEndX<touchStartX-50) showNext(); if(touchEndX>touchStartX+50) showPrev(); });
+
+/* INIT */
+setCompactMode();
